@@ -17,7 +17,7 @@ POST /api/signup:
     user_name: 新用户名
     password: 新密码
   期望响应:
-    - 状态码: 200
+    - 状态码: 201
       描述: 注册成功
     - 状态码: 409
       描述: 用户名已存在或学号已被注册
@@ -44,6 +44,13 @@ POST /api/resources:
   请求体（以 FormData 形式）:
     file: 文件内容和文件名
     folder_id: 上传到的文件夹id
+  期望响应:
+    - 状态码: 201
+      描述: 上传成功
+    - 状态码: 400
+      描述: 资源名称不合法
+    - 状态码: 409
+      描述: 资源名称冲突
 GET /api/resource/{res_id}:
   描述: 获取 res_id 指定的资源
   期望响应:
@@ -66,6 +73,15 @@ GET /api/folders:
         - folder_id: 文件夹id
           folder_name: 文件夹名称
           creator: 文件夹创建者
+POST /api/folders:
+  描述: 创建文件夹
+  期望响应:
+    - 状态码: 201
+      描述: 创建成功
+    - 状态码: 400
+      描述: 资源名称不合法
+    - 状态码: 409
+      描述: 文件夹名称冲突
 GET /api/folder/{folder_id}:
   描述: 获取 res_id 指定的文件夹详情
   期望响应:
