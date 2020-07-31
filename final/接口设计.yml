@@ -75,6 +75,8 @@ GET /api/folders:
           creator: 文件夹创建者
 POST /api/folders:
   描述: 创建文件夹
+  请求体:
+    folder_name: 文件夹名称
   期望响应:
     - 状态码: 201
       描述: 创建成功
