@@ -1,0 +1,127 @@
+GET /api/signin:
+  描述: 登录
+  特殊的请求头:
+    authorization: 用于 HTTP 基本认证的用户名和密码
+  期望响应:
+    - 状态码: 200
+      描述: 登录成功
+      响应头:
+        set-cookie: 设置 cookie 的 sessionID 字段
+    - 状态码: 401
+      描述: 用户名或密码错误
+POST /api/signup:
+  描述: 注册
+  请求体:
+    student_id: 学号
+    real_name: 真实姓名
+    user_name: 新用户名
+    password: 新密码
+  期望响应:
+    - 状态码: 200
+      描述: 注册成功
+    - 状态码: 409
+      描述: 用户名已存在或学号已被注册
+      响应体:
+        message: 用户名已存在/该学号已被注册
+GET /api/resources:
+  描述: 获取资源，具体获取的资源类型由请求参数（query parameter）提供
+  请求参数:
+    user: encodeURIComponent处理过的用户名/all，当该参数为 all 时，服务端不应该返回审核未通过的内容
+  期望响应:
+    - 状态码: 200
+      描述: 获取成功
+      响应体（数组）:
+        - res_id: 资源id
+          res_name: 资源名称
+          folder_name: 所属的文件夹
+          uploader: 上传者
+          approved: 审核是否通过
+          link: 文件下载链接
+POST /api/resources:
+  描述: 上传资源
+  特殊请求头:
+    - Content-Type: multipart/form-data
+  请求体（以 FormData 形式）:
+    file: 文件内容和文件名
+GET /api/resource/{res_id}:
+  描述: 获取 res_id 指定的资源
+  期望响应:
+    - 状态码: 200
+      描述: 获取成功
+      响应体:
+        res_name: 资源名称
+        uploader: 上传者
+        folder_name: 所属的文件夹
+        link: 文件下载链接
+        content: 当文件为纯文本内容时包含该字段，用于预览
+    - 状态码: 404
+      描述: 指定的 res_id 不存在
+GET /api/folders:
+  描述: 获取文件夹列表
+  期望响应:
+    - 状态码: 200
+      描述: 获取成功
+      响应体（数组）:
+        - folder_id: 文件夹id
+          folder_name: 文件夹名称
+          creator: 文件夹创建者
+GET /api/folder/{folder_id}:
+  描述: 获取 res_id 指定的文件夹详情
+  期望响应:
+    - 状态码: 200
+      描述: 获取成功
+      响应体:
+        - folder_name: 文件夹名称
+          creator: 文件夹创建者
+          resources（数组）:
+          - res_id: 资源id
+            res_name: 资源名称
+            folder_name: 所属的文件夹
+            uploader: 上传者
+            link: 文件下载链接
+    - 状态码: 404
+      描述: 指定的 folder_id 不存在
+GET /api/folder/{folder_id}/download:
+  描述: 请求服务端将 res_id 指定的文件夹打包（zip 或者 rar）并下载
+  期望响应:
+    - 状态码: 200
+      描述: 下载成功
+      响应体: 文件内容
+    - 状态码: 404
+      描述: 指定的 folder_id 不存在
+GET /api/user:
+  描述: 获取当前用户信息
+  期望响应:
+    - 状态码: 200
+      描述: 获取成功
+      响应体:
+        user_name: 用户名
+        gender: 性别
+        student_id: 学号
+        real_name: 真实姓名
+        school: 学院
+        class: 班级
+        phone: 电话
+        mail: 邮箱
+    - 状态码: 401
+      描述: 用户未登录，这个响应的结果要做，前端会使用这个接口判断当前用户是否已登录
+PUT /api/user:
+  描述: 更新当前用户信息（全量更新）
+  请求体:
+    user_name: 用户名
+    gender: 性别
+    student_id: 学号
+    real_name: 真实姓名
+    school: 学院
+    class: 班级
+    phone: 电话
+    mail: 邮箱
+  期望响应:
+    - 状态码: 200
+      描述: 更新成功
+    - 状态码: 401
+      描述: 用户未登录
+    - 状态码: 409
+      描述: 用户名已存在或学号已被注册
+      响应体:
+        message: 用户名已存在/该学号已被注册
