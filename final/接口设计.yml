@@ -43,6 +43,7 @@ POST /api/resources:
     - Content-Type: multipart/form-data
   请求体（以 FormData 形式）:
     file: 文件内容和文件名
+    folder_id: 上传到的文件夹id
 GET /api/resource/{res_id}:
   描述: 获取 res_id 指定的资源
   期望响应:
