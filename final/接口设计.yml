@@ -106,7 +106,8 @@ GET /api/folder/download/?folder=:
   期望响应:
     - 状态码: 200
       描述: 下载成功
-      响应体: 文件内容
+      响应体: 
+        file: 打包文件下载链接
     - 状态码: 404
       描述: 指定的 folder_id 不存在
 GET /api/user:
