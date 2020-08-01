@@ -1,7 +1,8 @@
-GET /api/signin:
+POST /api/signin:
   描述: 登录
-  特殊的请求头:
-    authorization: 用于 HTTP 基本认证的用户名和密码
+  请求体:
+    user_name: 用户名
+    password: 密码
   期望响应:
     - 状态码: 200
       描述: 登录成功
@@ -23,7 +24,7 @@ POST /api/signup:
       描述: 用户名已存在或学号已被注册
       响应体:
         message: 用户名已存在/该学号已被注册
-GET /api/resources:
+GET /api/resources/?user=:
   描述: 获取资源，具体获取的资源类型由请求参数（query parameter）提供
   请求参数:
     user: encodeURIComponent处理过的用户名/all，当该参数为 all 时，服务端不应该返回审核未通过的内容
@@ -37,7 +38,7 @@ GET /api/resources:
           uploader: 上传者
           approved: 审核是否通过
           link: 文件下载链接
-POST /api/resources:
+POST /api/resources/:
   描述: 上传资源
   特殊请求头:
     - Content-Type: multipart/form-data
@@ -51,7 +52,7 @@ POST /api/resources:
       描述: 资源名称不合法
     - 状态码: 409
       描述: 资源名称冲突
-GET /api/resource/{res_id}:
+GET /api/resources/?res_id=:
   描述: 获取 res_id 指定的资源
   期望响应:
     - 状态码: 200
@@ -61,7 +62,7 @@ GET /api/resource/{res_id}:
         uploader: 上传者
         folder_name: 所属的文件夹
         link: 文件下载链接
-        content: 当文件为纯文本内容时包含该字段，用于预览
+        content: 当文件为纯文本内容时包含该字段，用于预览（暂不支持）
     - 状态码: 404
       描述: 指定的 res_id 不存在
 GET /api/folders:
@@ -84,7 +85,7 @@ POST /api/folders:
       描述: 资源名称不合法
     - 状态码: 409
       描述: 文件夹名称冲突
-GET /api/folder/{folder_id}:
+GET /api/folder/?folder_id=:
   描述: 获取 res_id 指定的文件夹详情
   期望响应:
     - 状态码: 200
@@ -100,7 +101,7 @@ GET /api/folder/{folder_id}:
             link: 文件下载链接
     - 状态码: 404
       描述: 指定的 folder_id 不存在
-GET /api/folder/{folder_id}/download:
+GET /api/folder/download/?folder=:
   描述: 请求服务端将 res_id 指定的文件夹打包（zip 或者 rar）并下载
   期望响应:
     - 状态码: 200
@@ -144,3 +145,9 @@ PUT /api/user:
       描述: 用户名已存在或学号已被注册
       响应体:
         message: 用户名已存在/该学号已被注册
+POST /api/signup:
+  描述: 用户登出
+  请求体:
+  期望响应:
+    - 状态码: 200
+      描述: 登出成功
